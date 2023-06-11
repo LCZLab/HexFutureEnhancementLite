@@ -1,136 +1,6 @@
-var extension_version = "0.1.2"
+var extension_version = "Lite 0.2.0"
 
-if (document.querySelector("header > div.finishClass > a")) {
-    var userName = document.cookie.split("; ").find(row => row.startsWith("userName=")).split("=")[1]
-    userName = decodeURIComponent(userName)
-    var userNameMd5 = ""
-    var schoolID = document.cookie.split("; ").find(row => row.startsWith("SchoolID=")).split("=")[1]
-    var ssotoken = document.cookie.split("; ").find(row => row.startsWith("ssotoken=")).split("=")[1]
-}
-
-setInterval(function () {
-    var hours = new Date().getHours()
-    var minutes = new Date().getMinutes()
-    var seconds = new Date().getSeconds()
-
-    if (hours.toString().length == 1) {
-        hours = "0" + hours
-    }
-
-    if (minutes.toString().length == 1) {
-        minutes = "0" + minutes
-    }
-
-    if (seconds.toString().length == 1) {
-        seconds = "0" + seconds
-    }
-
-    var time = hours + ":" + minutes + ":" + seconds
-
-    console.log(time)
-
-    // API to update user info
-
-    // https://api.hexfuture.net/User/GetUserInfoForUpdate?ssotoken=
-
-    // get user info by id
-
-    // https://beike.hexfuture.net/routeapi/User/GetByUserID?ssotoken=&userID=
-
-    var userNameGlobalWhiteList = ['贺长安', '徐建', '何燕秋', '唐化兰']
-    var autoFinishClassWhiteList = ['唐化兰']
-
-    var timeTable = ['08:30:00', '09:20:00', '10:10:00', '11:20:00', '12:10:00', '15:25:00', '16:15:00', '17:05:00', '17:55:00', '19:30:00', '20:20:00', '21:10:00', '22:00:00']
-
-    var noticeTimeTable = ['08:25:00', '09:15:00', '10:05:00', '11:15:00', '12:05:00', '15:20:00', '16:10:00', '17:00:00', '17:50:00', '19:25:00', '20:15:00', '21:05:00', '21:55:00']
-
-    var finishClassTimeTable = ['08:31:30', '09:21:30', '10:11:30', '11:21:30', '12:11:30', '15:26:30', '16:16:30', '17:06:30', '17:56:30', '19:31:30', '20:21:30', '21:11:30', '22:01:30']
-
-    // TODO: var afterClassTimeTable = 
-    // startClass.remove()
-
-    // Goodbye fucking bitch canvas background-color
-    var mainDOM = document.querySelector("main")
-    if (document.querySelector("main > style.canvas")) {
-        // do nothing
-    } else {
-        mainDOM.innerHTML = mainDOM.innerHTML + '<style class="canvas">main > canvas {background-color: rgba(0, 0, 0, 0) !important;} body.dark.childrenBody canvas {background-color: rgba(0, 0, 0, 0) !important;} canvas {background-color: rgba(0, 0, 0, 0) !important;}</style>'
-    }
-
-    // 如果下课按钮存在 则认为已经上课 执行下列判断
-    if (document.querySelector("header > div.finishClass > a")) {
-
-        if (userNameGlobalWhiteList.indexOf(userName) != -1) {
-            console.log("全局白名单教师，不执行下课相关逻辑")
-        } else {
-
-            if (timeTable.indexOf(time) != -1) {
-                if (autoFinishClassWhiteList.indexOf(userName) != -1) {
-                    document.querySelector("header > div.courseName > span.finishClass").innerHTML = "<span class='finishClass'>下课了，" + userName + "老师，您辛苦了。</span>"
-                } else {
-                    document.querySelector("header > div.courseName > span.finishClass").innerHTML = "<span class='finishClass'>下课了，" + userName + "老师，您辛苦了；系统将于 1 分钟 30 秒后自动登出。</span>"
-
-                }
-
-                // alert("下课时间到了，" + userName + "老师，您辛苦了。\n您还有 1 分钟 30 秒收尾时间，在此之后，系统会为您自动登出。")
-                // document.querySelector("header > div.fullScreen > a").click()
-
-                // document.querySelector("header > div.finishClass > a").click()
-            }
-
-            if (noticeTimeTable.indexOf(time) != -1) {
-                // alert("距下课还有 5 分钟，请您合理安排课堂进度。")<
-                // $(".courseName").append("<span class='finishClass'>距下课还有 5 分钟，请您合理安排课堂进度。</span>")
-                document.querySelector("header > div.courseName").innerHTML = document.querySelector("header > div.courseName").innerHTML + "<span class='finishClass'>距下课还有 5 分钟，请您合理安排课堂进度。</span>"
-
-                // document.querySelector("header > div.fullScreen > a").click()
-            }
-
-            if (finishClassTimeTable.indexOf(time) != -1) {
-                if (autoFinishClassWhiteList.indexOf
-                    (userName) != -1) {
-                    console.log("The teacher currently has been allowed to bypass the rule.")
-                } else {
-                    document.querySelector("header > div.courseName > span.finishClass").innerHTML = "<span class='finishClass'>登出中……</span>"
-                    document.querySelector("header > div.finishClass > a").click()
-                }
-            }
-        }
-
-        if (document.querySelector("div.bottomDock > div.selectStudent")) {
-            document.querySelector("div.bottomDock > div.selectStudent").remove()
-        }
-
-    }
-
-    if (document.querySelector("header > div.finishClass > a")) {
-        if (document.querySelector("header > div.courseName > span.changeTeacher")) {
-            // do nothing
-        } else {
-            if (document.querySelector("header > div.courseName > span.className").innerText) {
-                document.querySelector("header > div.courseName").innerHTML = "<span class='changeTeacher'>" + userName + "</span>" + "<a class='changeTeacher'>换教师</a>" + document.querySelector("header div.courseName").innerHTML
-            } else { }
-        }
-    }
-
-}, 1000
-
-)
-
-setTimeout(
-    function () {
-        document.querySelector("header > div.courseName > a.changeTeacher").addEventListener('click', function () {
-            document.querySelector("header > div.finishClass > a").click()
-        }
-        )
-        // modals 里的 changeCourse 可以拿来借用
-        // 参考 index.min.js f ()
-    }, 30000
-)
-
-
-
-// 如果在主页
+// 周末课表支持 Logic
 if (document.querySelector("header > div.startClass > a")) {
     // 获取今天是周几
     var day = new Date().getDay()
@@ -197,93 +67,75 @@ if (document.querySelector("header > div.startClass > a")) {
     }, 2000)
 
     // output version
-    if (!document.querySelector("main > p#icp").classList.contains("ver")) {
-        document.querySelector("main > p#icp").innerHTML = '<a href="https://github.com/LiCaoZ/HexFutureEnhancement" target="_blank">十六进制课堂增强扩展</a> 版本 ' + extension_version + ' | <a href="https://beian.miit.gov.cn" target="_blank">京ICP备16054026号-1</a>'
-        document.querySelector("main > p#icp").classList.add("ver")
-    }
-}
-
-// 如果开启了替换首页名人名言
-// chrome.runtime.sendMessage({ command: "getLocalStorage", key: "replaceSaying" }, function (response) {
-// if ((response) == "true") {
-// console.log("已开启替换首页名人名言功能")
+    document.querySelector("main > p#icp").innerHTML = '<a href="https://github.com/LCZLab/HexFutureEnhancementLite" target="_blank">十六进制课堂增强扩展</a> 版本 ' + extension_version + ' | <a href="https://beian.miit.gov.cn" target="_blank">京ICP备16054026号-1</a>'
 
 
-/**
- * Modified from 今日诗词 V2 JS-SDK 1.2.2
- * 今日诗词 API 是一个可以免费调用的诗词接口：https://www.jinrishici.com
- */
-!function (e) {
-    var n, t = {}, o = "jinrishici-token";
-    function i() {
-        return document.querySelector("main > div.saying > h1")
-            || 0 != document.querySelector("main > div.saying > h1")
-                .length
-    }
-    function c() {
-        t.load(function (e) {
-            var n = document.querySelector("main > div.saying > h1")
-                , t = document.querySelector("main > div.saying > h1");
-            if (n && (n.innerHTML = e.data.content + "<span>——" + e.data.origin.author + " 《" + e.data.origin.title + "》</span>"
-            ),
-                0 !== t.length)
-                for (var o = 0; o < t.length; o++)
-                    t[o].innerHTML = e.data.content + "<span>——" + e.data.origin.author + " 《" + e.data.origin.title + "》</span>"
-
-        })
-    }
-
-    // 定时更换诗词
-    // 检测配置项
-    // if (localStorage.getItem("autoChangePoetry") == "true") {
-    //     console.log("已开启定时更换诗词功能")
-    setInterval(function () {
-        if (document.querySelector("header > div.finishClass > a")) {
-            console.log("非主页，不执行更换诗词相关逻辑")
-        } else {
-            c()
-            console.log("更换诗词事件触发")
+    /**
+     * Modified from 今日诗词 V2 JS-SDK 1.2.2
+     * 今日诗词 API 是一个可以免费调用的诗词接口：https://www.jinrishici.com
+     * 替换名人名言 Logic
+     */
+    !function (e) {
+        var n, t = {}, o = "jinrishici-token";
+        function i() {
+            return document.querySelector("main > div.saying > h1")
+                || 0 != document.querySelector("main > div.saying > h1")
+                    .length
         }
-    }, 60000)
-    // } else {
-    //     console.log("未开启定时更换诗词功能")
-    // }
+        function c() {
+            t.load(function (e) {
+                var n = document.querySelector("main > div.saying > h1")
+                    , t = document.querySelector("main > div.saying > h1");
+                if (n && (n.innerHTML = e.data.content + "<span>——" + e.data.origin.author + " 《" + e.data.origin.title + "》</span>"
+                ),
+                    0 !== t.length)
+                    for (var o = 0; o < t.length; o++)
+                        t[o].innerHTML = e.data.content + "<span>——" + e.data.origin.author + " 《" + e.data.origin.title + "》</span>"
 
-    // 从插件 local storage 中获取配置项
+            })
+        }
 
-    function r(e, n) {
-        var t = new XMLHttpRequest;
-        t.open("get", n),
-            t.withCredentials = !0,
-            t.send(),
-            t.onreadystatechange = function (n) {
-                if (4 === t.readyState) {
-                    var o = JSON.parse(t.responseText);
-                    "success" === o.status ? e(o) : console.error("今日诗词API加载失败，错误原因：" + o.errMessage)
-                }
+        // 定时更换诗词
+        // 每 10 分钟一次，可以自行修改原始码调节
+        setInterval(function () {
+            if (document.querySelector("header > div.finishClass > a")) {
+                console.log("非主页，不执行更换诗词相关逻辑")
+            } else {
+                c()
+                console.log("更换诗词事件触发")
             }
-    }
-    t.load = function (n) {
-        return e.localStorage && e.localStorage.getItem(o) ? function (e, n) {
-            return r(e, "https://v2.jinrishici.com/one.json?client=browser-sdk/1.2&X-User-Token=" + encodeURIComponent(n))
-        }(n, e.localStorage.getItem(o)) : function (n) {
-            return r(function (t) {
-                e.localStorage.setItem(o, t.token),
-                    n(t)
-            }, "https://v2.jinrishici.com/one.json?client=browser-sdk/1.2")
-        }(n)
-    }
-        ,
-        e.jinrishici = t,
-        i() ? c() : (n = function () {
-            i() && c()
+        }, 600000)
+
+        function r(e, n) {
+            var t = new XMLHttpRequest;
+            t.open("get", n),
+                t.withCredentials = !0,
+                t.send(),
+                t.onreadystatechange = function (n) {
+                    if (4 === t.readyState) {
+                        var o = JSON.parse(t.responseText);
+                        "success" === o.status ? e(o) : console.error("今日诗词API加载失败，错误原因：" + o.errMessage)
+                    }
+                }
+        }
+        t.load = function (n) {
+            return e.localStorage && e.localStorage.getItem(o) ? function (e, n) {
+                return r(e, "https://v2.jinrishici.com/one.json?client=browser-sdk/1.2&X-User-Token=" + encodeURIComponent(n))
+            }(n, e.localStorage.getItem(o)) : function (n) {
+                return r(function (t) {
+                    e.localStorage.setItem(o, t.token),
+                        n(t)
+                }, "https://v2.jinrishici.com/one.json?client=browser-sdk/1.2")
+            }(n)
         }
             ,
-            "loading" != document.readyState ? n() : document.addEventListener ? document.addEventListener("DOMContentLoaded", n) : document.attachEvent("onreadystatechange", function () {
-                "complete" == document.readyState && n()
-            }))
-}(window);
-    // } else {
-        // console.log("未开启替换首页名人名言功能")
-    // }
-// });
+            e.jinrishici = t,
+            i() ? c() : (n = function () {
+                i() && c()
+            }
+                ,
+                "loading" != document.readyState ? n() : document.addEventListener ? document.addEventListener("DOMContentLoaded", n) : document.attachEvent("onreadystatechange", function () {
+                    "complete" == document.readyState && n()
+                }))
+    }(window);
+}

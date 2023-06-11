@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
-    "name": "十六进制课堂增强",
-    "description": "一款帮助改善 「十六进制课堂」 用户体验的插件。",
-    "version": "0.1.2",
+    "name": "十六进制课堂增强 (Lite)",
+    "description": "一款帮助改善 「十六进制课堂」 用户体验的插件。极速版。",
+    "version": "0.2.0",
     "content_scripts": [
         {
             "js": [
@@ -15,17 +15,5 @@
     ],
     "icons": {
         "48": "hexfuture.png"
-    },
-    "options_ui": {
-        "page": "options.html",
-        "open_in_tab": true
-    },
-    "permissions": [
-        "storage"
-    ],
-    "browser_specific_settings": {
-        "gecko": {
-            "id": "hfe@hfe.licaoz.com"
-        }
     }
 }
