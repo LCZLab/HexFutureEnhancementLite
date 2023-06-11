@@ -17,6 +17,6 @@ A gift to all students using HexFuture from Chongqing.
 
 ![](https://user-images.githubusercontent.com/67832651/232281431-6210dd23-7e1d-439a-8660-8c58454055a2.png)
 
-**「修复周末课程表」功能目前暂不支持通过首页编辑周末课表，请前往课程表总览执行编辑操作**
+**「修复周末课程表」功能目前暂不支持通过首页编辑周末课表，请前往课程表总览执行编辑操作。编辑完成后，请 *刷新* 页面。**
 
 PR & Issue is welcomed!
